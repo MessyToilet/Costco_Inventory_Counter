@@ -65,3 +65,5 @@ if __name__ == '__main__':
 
 #use dict to store?
 #Double check correct entry?
+#better graphics? total entrys/ credits/ version/ last entry + info
+#implement pandas with CSV?
