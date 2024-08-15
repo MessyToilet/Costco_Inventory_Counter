@@ -1,7 +1,17 @@
 from datetime import datetime
+from posix import closerange
 import pandas as pd
 import shutil
 import os
+
+def clear_screen() -> None:
+    if os.name == "nt":
+        os.system("cls")        #windows
+    elif os.name == "posix":
+        os.system("clear")   #linux
+    else:
+        print("Unkown CLI!")
+    return
 
 def handle_info_bar(name:str, entries:str, last_entery:str) -> None:
     version: str = "1.0"
@@ -24,7 +34,7 @@ def handle_info_bar(name:str, entries:str, last_entery:str) -> None:
 
     left_text    =f"| Last Entry: {last_entery}"
     middle_text = f""
-    right_text  = f"Total Entries: {entries:<8} |"
+    right_text  = f"Total Entries: {entries:<9} |"
 
     left_text_size    = len(left_text)
     middle_text_start = (terminal_width - len(middle_text)) // 2
@@ -37,8 +47,7 @@ def handle_info_bar(name:str, entries:str, last_entery:str) -> None:
 def handle_print_menu(name:str, entries: str, last_entry:str, ) -> int:
     while True:
         try:
-            if os.name == "nt": os.system("cls")        #windows
-            if os.name == "posix": os.system("clear")   #linux
+            clear_screen()
             handle_info_bar(name, entries, last_entry)
             choice: int = int(input("\nO P T I O N S\n\t(1) Add Item\n\t(2) Edit Item\n\t(3) Delete Item\n\t(4) Veiw Inventory\n\t(5) Quit\n\n"))
             break
@@ -60,6 +69,7 @@ def handle_input_and_calculation() -> tuple[int, str]:
     return total, item
 
 def main() -> None:
+    clear_screen()
     print("Starting Costco Inventory Counter!")
 
     current_counter_name: str = str(input("Current Counter: ")).capitalize()
