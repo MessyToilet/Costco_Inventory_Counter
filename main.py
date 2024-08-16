@@ -1,5 +1,4 @@
 from datetime import datetime
-from posix import closerange
 import pandas as pd
 import shutil
 import os
@@ -15,14 +14,14 @@ def clear_screen() -> None:
 
 def handle_info_bar(name:str, entries:str, last_entery:str) -> None:
     version: str = "1.0"
-    credits: str = "Jacob C"
+    credits: str = "Snow Desert Solutions"
     title:   str = "COSTCO INVENTORY COUNTER"
     time:    str = datetime.now().strftime("%H:%M:%S")
 
     terminal_width = shutil.get_terminal_size().columns
     left_text      = f"| Current Counter: {name}"
     middle_text    = f"{title}"
-    right_text     = f"By: {credits}   Release: {version}   {time}  |"
+    right_text     = f"{credits}   Release: {version}   {time}  |"
 
     left_text_size    = len(left_text)
     middle_text_start = (terminal_width - len(middle_text)) // 2
@@ -32,7 +31,7 @@ def handle_info_bar(name:str, entries:str, last_entery:str) -> None:
     print(f"{left_text}{' ' * (middle_text_start - left_text_size)}{middle_text}{' ' * (right_text_start - middle_text_start - len(middle_text))}{right_text}")
     print(f"├{'-' * (terminal_width - 2)}┤")
 
-    left_text    =f"| Last Entry: {last_entery}"
+    left_text    =f"| Last Entry: {last_entery}   Last Entry Total: "
     middle_text = f""
     right_text  = f"Total Entries: {entries:<9} |"
 
@@ -73,18 +72,19 @@ def main() -> None:
     print("Starting Costco Inventory Counter!")
 
     current_counter_name: str = str(input("Current Counter: ")).capitalize()
-    total:       int = 0
-    total_entry: int = 0
-    last_entry:  str = ""
+    current_entry_total:  int = 0
+    total_entries:        int = 0
+    last_entry:           str = ""
+    last_entry_total:     int = 0
 
     while True:
-        choice = handle_print_menu(current_counter_name, str(total_entry), last_entry)
+        choice = handle_print_menu(current_counter_name, str(total_entries), last_entry)
         if choice == 1:
             while True: #Getting values
                 try:
-                    total, last_item = handle_input_and_calculation()
-                    total_entry += 1
-                    print(total)
+                    current_entry_total, last_entry = handle_input_and_calculation()
+                    total_entries += 1
+                    print(current_entry_total)
                     break
                 except:
                     print("Bad Type Given!")
