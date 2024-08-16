@@ -12,7 +12,7 @@ def clear_screen() -> None:
         print("Unkown CLI!")
     return
 
-def handle_info_bar(name:str, entries:str, last_entery:str) -> None:
+def handle_info_bar(name:str, entries:str, last_entery:str, last_entry_total: str) -> None:
     version: str = "1.0"
     credits: str = "Snow Desert Solutions"
     title:   str = "COSTCO INVENTORY COUNTER"
@@ -31,7 +31,7 @@ def handle_info_bar(name:str, entries:str, last_entery:str) -> None:
     print(f"{left_text}{' ' * (middle_text_start - left_text_size)}{middle_text}{' ' * (right_text_start - middle_text_start - len(middle_text))}{right_text}")
     print(f"├{'-' * (terminal_width - 2)}┤")
 
-    left_text    =f"| Last Entry: {last_entery}   Last Entry Total: "
+    left_text    =f"| Last Entry: {last_entery}   Last Entry Total: {last_entry_total}"
     middle_text = f""
     right_text  = f"Total Entries: {entries:<9} |"
 
@@ -43,11 +43,11 @@ def handle_info_bar(name:str, entries:str, last_entery:str) -> None:
     print(f"└{'-' * (terminal_width - 2)}┘")
     return
 
-def handle_print_menu(name:str, entries: str, last_entry:str, ) -> int:
+def handle_print_menu(name:str, entries: str, last_entry:str, last_entry_total:str ) -> int:
     while True:
         try:
             clear_screen()
-            handle_info_bar(name, entries, last_entry)
+            handle_info_bar(name, entries, last_entry, last_entry_total)
             choice: int = int(input("\nO P T I O N S\n\t(1) Add Item\n\t(2) Edit Item\n\t(3) Delete Item\n\t(4) Veiw Inventory\n\t(5) Quit\n\n"))
             break
         except:
@@ -71,23 +71,37 @@ def main() -> None:
     clear_screen()
     print("Starting Costco Inventory Counter!")
 
+    inventory = {}
+
     current_counter_name: str = str(input("Current Counter: ")).capitalize()
     current_entry_total:  int = 0
+    currnet_entry:        str = ""
     total_entries:        int = 0
     last_entry:           str = ""
     last_entry_total:     int = 0
 
+
     while True:
-        choice = handle_print_menu(current_counter_name, str(total_entries), last_entry)
+        choice = handle_print_menu(current_counter_name, str(total_entries), last_entry, str(last_entry_total))
         if choice == 1:
             while True: #Getting values
                 try:
-                    current_entry_total, last_entry = handle_input_and_calculation()
+                    current_entry_total, currnet_entry = handle_input_and_calculation()
                     total_entries += 1
-                    print(current_entry_total)
+                
+                    #check if item is non-empty
+                    if currnet_entry in inventory:
+                        inventory[currnet_entry] += current_entry_total
+                    else: 
+                        inventory[currnet_entry] = current_entry_total
+
+                    last_entry       = currnet_entry
+                    last_entry_total = current_entry_total
+
                     break
                 except:
                     print("Bad Type Given!")
+
         elif choice == 2:
             pass
         elif choice == 3:
@@ -105,11 +119,18 @@ if __name__ == '__main__':
 
 
 
-
+#break choices into funcs
 #use dict to store?
+#   check if inv is non-empty
+#   add/ remove/ edit key+val 
 #Double check correct entry?
 #better graphics? total entrys/ credits/ version/ last entry + info
 #   implement last entry total
 #implement pandas with CSV?
 #   handle save file saving when quiting?
 #convert info bar data to json?
+#Edit Choice:
+#   edit total for item
+#   rename item
+#   merge two items
+
