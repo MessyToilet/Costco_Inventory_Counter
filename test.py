@@ -10,3 +10,13 @@ while True:
 
 my_dict_sorted = {key: value for key, value in sorted(my_dict.items())}
 print(my_dict_sorted)
+
+def foo():
+    global a 
+    a = 5
+
+def func():
+    print(a)
+
+foo()
+func()

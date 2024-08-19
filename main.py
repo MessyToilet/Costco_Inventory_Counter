@@ -56,7 +56,7 @@ def handle_print_menu(name:str, entries: str, last_entry:str, last_entry_total:s
 
 def handle_input_and_calculation() -> tuple[int, str]:
     total       = 0
-    item        = str(input("Item: "))
+    item:   str = str(input("Item: "))
     length: int = int(input("L: "))
     width:  int = int(input("W: "))
     height: int = int(input("H: "))
@@ -67,48 +67,78 @@ def handle_input_and_calculation() -> tuple[int, str]:
         print("Warning n <= 0!")
     return total, item
 
+def choice_1() -> tuple[str, int]:
+    while True: #Getting values
+        try:
+            current_entry_total, currnet_entry = handle_input_and_calculation()
+
+            #check if item is non-empty
+            if currnet_entry in inventory:
+                inventory[currnet_entry] += current_entry_total
+            else:
+                inventory[currnet_entry] = current_entry_total
+
+            last_entry       = currnet_entry
+            last_entry_total = inventory[last_entry]
+
+            break
+        except:
+            print("Bad Type Given!")
+    return last_entry, last_entry_total
+
+def handle_edit():
+    return
+
+def handle_delete():
+    return
+
+def print_inventory_sorted() -> None:
+    inventory_sorted = {key: value for key, value in sorted(inventory.items())}
+    for key in inventory_sorted:
+        print(f"{key}{' ' * (10 - len(key))} {inventory_sorted[key]}")
+    return
+
+def choice_4() -> None:
+    clear_screen()
+    print(f"Item{' ' * (10 - len('Item'))} Amount")
+    print_inventory_sorted()
+    for i in range(100):
+        print(i)
+    input("Press Any Key To Contiune...")
+    return
+
+def choice_5() -> None:
+    print_inventory_sorted()
+    return
+
 def main() -> None:
     clear_screen()
     print("Starting Costco Inventory Counter!")
 
+    global inventory
     inventory = {}
 
     current_counter_name: str = str(input("Current Counter: ")).capitalize()
-    current_entry_total:  int = 0
-    currnet_entry:        str = ""
-    total_entries:        int = 0
     last_entry:           str = ""
     last_entry_total:     int = 0
 
 
     while True:
-        choice = handle_print_menu(current_counter_name, str(total_entries), last_entry, str(last_entry_total))
-        if choice == 1:
-            while True: #Getting values
-                try:
-                    current_entry_total, currnet_entry = handle_input_and_calculation()
-                    total_entries += 1
-                
-                    #check if item is non-empty
-                    if currnet_entry in inventory:
-                        inventory[currnet_entry] += current_entry_total
-                    else: 
-                        inventory[currnet_entry] = current_entry_total
+        choice = handle_print_menu(current_counter_name, str(len(inventory)), last_entry, str(last_entry_total))
+        if choice == 1: #add
+            last_entry, last_entry_total = choice_1()
 
-                    last_entry       = currnet_entry
-                    last_entry_total = current_entry_total
+        elif choice == 2: #edit
 
-                    break
-                except:
-                    print("Bad Type Given!")
+            pass
+        elif choice == 3: #delete
 
-        elif choice == 2:
             pass
-        elif choice == 3:
+        elif choice == 4: #veiw
+            choice_4()
             pass
-        elif choice == 4:
-            pass
-        elif choice == 5:
+        elif choice == 5: #quit
+            choice_5()
             break
 
     return
@@ -122,7 +152,7 @@ if __name__ == '__main__':
 #break choices into funcs
 #use dict to store?
 #   check if inv is non-empty
-#   add/ remove/ edit key+val 
+#   add/ remove/ edit key+val
 #Double check correct entry?
 #better graphics? total entrys/ credits/ version/ last entry + info
 #   implement last entry total
@@ -133,4 +163,3 @@ if __name__ == '__main__':
 #   edit total for item
 #   rename item
 #   merge two items
-
